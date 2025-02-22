@@ -13,6 +13,7 @@ while True:
     if answer == "1":
         # reads input.txt file
         try:
+            # change this to match your directory
             with open('Projects/Project1/input.txt', 'r') as f:
                 file_text = f.read()
             result = lp.run('<stdin>', file_text)
@@ -98,4 +99,3 @@ while True:
             print(f'\n{result}\n')
 
         break
-    
