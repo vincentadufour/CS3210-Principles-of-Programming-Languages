@@ -1,3 +1,10 @@
+# Author: Vincent Dufour
+# Date: 27.03.2025
+# Time Taken: 6 hours and 45 minutes
+# Your commenting character used for the lexer: !
+
+
+
 #Create TOCKENS list
 INT  = 'INT'
 FLOAT = 'FLOAT'
@@ -62,8 +69,11 @@ class Lexer:
     def make_tokens(self):
         tokens = []
 
-        while self.current_char != None:
-            if self.current_char in OPERATORS:
+        while self.current_char is not None:
+            if self.current_char in ' \t':
+                self.advance()
+                continue
+            elif self.current_char in OPERATORS:
                 tokens.append(self.make_operater())
             elif self.current_char in DIGITS: 
                 tokens.append(self.make_number())
@@ -124,18 +134,24 @@ class Lexer:
     def make_number(self):
         num_str = ''
         dot_count = 0
-        while self.current_char != None and self.current_char in DIGITS + '.':
+        while self.current_char is not None and (self.current_char in DIGITS or self.current_char == '.'):
 
             if self.current_char == '.':
+                if dot_count == 1:
+                    break
                 dot_count += 1
-            
             num_str += self.current_char
-
             self.advance()
 
         if dot_count == 0:
             return Token(INT, int(num_str))
         else:
+            # number ends with a dot, so remove trailing dot
+            if num_str[-1] == '.':                      
+                num_str = num_str[:-1]
+                self.pos -= 1
+                self.current_char = '.'
+                return Token(INT, int(num_str))
             return Token(FLOAT, float(num_str))
             
         
